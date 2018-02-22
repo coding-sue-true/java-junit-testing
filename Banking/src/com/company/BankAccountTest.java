@@ -1,44 +1,77 @@
 package com.company;
 
-//import static org.junit.Assert.*;
+
+import org.junit.After;
+import org.junit.AfterClass;
+import org.junit.Before;
+import org.junit.BeforeClass;
+import org.junit.Test;
+
 import static junit.framework.TestCase.assertEquals;
 import static junit.framework.TestCase.fail;
+import static org.junit.Assert.assertTrue;
 
 public class BankAccountTest {
 
-    @org.junit.Test
+    private com.company.BankAccount account;
+    private static int count;
+
+    @BeforeClass
+    public static void beforeClass(){
+        System.out.println("This runs before any test class. Count = " + count++);
+    }
+
+    @Before
+    public void setup(){
+        account = new com.company.BankAccount("Tim", "Buchalka", 1000.00,  com.company.BankAccount.CHECKING);
+        System.out.println("Running a test...");
+    }
+
+    @Test
     public void deposit() throws Exception {
-        BankAccount account = new BankAccount("Tim", "Buchalka", 1000.00, BankAccount.CHECKING);
         double balance = account.deposit(200.00, true);
         assertEquals(1200.00, balance, 0);
         assertEquals(1200.00, account.getBalance(), 0);
     }
 
-    @org.junit.Test
-    public void withdraw() throws Exception {
-        fail("This test has yet to be implemented");
+    @Test
+    public void withdraw_branch() throws Exception {
+        double balance = account.withdraw(600.00, true);
+        assertEquals(400.00, balance, 0);
     }
 
-    @org.junit.Test
+    @Test(expected = IllegalArgumentException.class)
+    public void withdraw_notBranch() throws Exception {
+        double balance = account.withdraw(600.00, false);
+        assertEquals(400.00, balance, 0);
+    }
+
+    @Test
     public void getBalance_deposit() throws Exception {
-        BankAccount account = new BankAccount("Tim", "Buchalka", 1000.00, BankAccount.CHECKING);
         account.deposit(200.00, true);
         assertEquals(1200.00, account.getBalance(), 0);
     }
 
-    @org.junit.Test
+    @Test
     public void getBalance_withdraw() throws Exception {
-        BankAccount account = new BankAccount("Tim", "Buchalka", 1000.00, BankAccount.CHECKING);
         account.withdraw(200.00, true);
         assertEquals(800.00, account.getBalance(), 0);
     }
 
-    @org.junit.Test
+    @Test
     public void isChecking_true() throws Exception {
-        BankAccount account = new BankAccount("Tim", "Buchalka", 1000.00, BankAccount.CHECKING);
-        assertEquals(true, account.isChecking());
+        assertTrue("The account is NOT a checking account", account.isChecking());
     }
 
+    @AfterClass
+    public static void afterClass(){
+        System.out.println("This runs after any test class. Count = " + count++);
+    }
+
+    @After
+    public void teardown(){
+        System.out.println("Count = " + count++);
+    }
 
 
 }
