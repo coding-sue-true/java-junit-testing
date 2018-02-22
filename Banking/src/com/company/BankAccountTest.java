@@ -40,10 +40,16 @@ public class BankAccountTest {
         assertEquals(400.00, balance, 0);
     }
 
-    @Test(expected = IllegalArgumentException.class)
+    @Test // (expected = IllegalArgumentException.class)
+    // if the line above was not commented out, we wouldn't need the try and catch expressions
     public void withdraw_notBranch() throws Exception {
-        double balance = account.withdraw(600.00, false);
-        assertEquals(400.00, balance, 0);
+        try {
+            account.withdraw(600.00, false);
+            //message in case it fails
+            fail("Should have thrown an IllegalArgumentException");
+        } catch(IllegalArgumentException e) {
+
+        }
     }
 
     @Test
